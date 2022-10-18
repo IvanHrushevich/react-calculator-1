@@ -1,4 +1,4 @@
-export const enum ACTIONS {
+export const enum ACTION {
   ADD_DIGIT = 'add-digit',
   CHOOSE_OPERATION = 'choose-operation',
   CLEAR = 'clear',
@@ -9,10 +9,10 @@ export const enum ACTIONS {
 export interface State {
   currentOperand: string;
   previousOperand: string;
-  operation: ACTIONS | null;
+  operation: ACTION | null;
 }
 
 export interface Payload {
-  type: string;
+  type: ACTION;
   payload: any;
 }

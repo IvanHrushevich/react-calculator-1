@@ -1,13 +1,13 @@
-import { ACTIONS, Payload } from '../models';
+import { ACTION, Payload } from '../models';
 
 type Props = {
   dispatch: (payload: Payload) => void;
-  digit: number;
+  digit: string;
 };
 
 const DigitButton = (props: Props) => {
   return (
-    <button onClick={() => props.dispatch({ type: ACTIONS.ADD_DIGIT, payload: { digit: props.digit } })}>
+    <button onClick={() => props.dispatch({ type: ACTION.ADD_DIGIT, payload: { digit: props.digit } })}>
       {props.digit}
     </button>
   );
