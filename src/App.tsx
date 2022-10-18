@@ -1,25 +1,9 @@
 import { useReducer } from 'react';
 
+import DigitButton from './components/DigitButton';
+import { ACTIONS, Payload, State } from './models';
+
 import './styles.css';
-
-export const enum ACTIONS {
-  ADD_DIGIT = 'add-digit',
-  CHOOSE_OPERATION = 'choose-operation',
-  CLEAR = 'clear',
-  DELETE_DIGIT = 'delete-digit',
-  EVALUATE = 'evaluate',
-}
-
-interface State {
-  currentOperand: string;
-  previousOperand: string;
-  operation: ACTIONS | null;
-}
-
-interface Payload {
-  type: string;
-  payload: any;
-}
 
 const initialState: State = {
   currentOperand: '',
@@ -27,33 +11,37 @@ const initialState: State = {
   operation: null,
 };
 
-function App() {
-  function reducer(state: State, { type, payload }: Payload): State {
-    switch (type) {
-      case ACTIONS.ADD_DIGIT:
-        return {
-          ...state,
-          currentOperand: `${currentOperand || ''}${payload.digit}`,
-        };
+function reducer(state: State, { type, payload }: Payload): State {
+  switch (type) {
+    case ACTIONS.ADD_DIGIT:
+      return {
+        ...state,
+        // TODO: fix
+        // currentOperand: `${currentOperand || ''}${payload.digit}`,
+        currentOperand: `${payload.digit}`,
+      };
 
-      default: {
-        return state;
-      }
+    default: {
+      return state;
     }
   }
+}
 
+function App() {
   const [{ currentOperand, previousOperand, operation }, dispatch]: [State, any] = useReducer(reducer, initialState);
 
   return (
     <div className="calculator-grid">
       <div className="output">
-        <div className="previous-operand">123,456 *</div>
-        <div className="current-operand">345,567</div>
+        <div className="previous-operand">
+          {previousOperand} {operation}{' '}
+        </div>
+        <div className="current-operand">{currentOperand}</div>
       </div>
       <button className="span-two">AC</button>
       <button>Del</button>
       <button>÷</button>
-      <button>1</button>
+      <DigitButton digit={1} dispatch={dispatch} />
       <button>2</button>
       <button>3</button>
       <button>*</button>
