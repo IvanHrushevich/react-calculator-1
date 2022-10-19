@@ -83,6 +83,12 @@ function reducer(state: State, { type, payload }: Payload): State {
         currentOperand: null,
       };
 
+    case ACTION.DELETE_DIGIT:
+      if (state.overwrite) return INITIAL_STATE;
+      if (state.currentOperand === null) return state;
+      if (state.currentOperand.length === 1) return { ...state, currentOperand: null };
+      return { ...state, currentOperand: state.currentOperand.slice(0, -1) };
+
     case ACTION.EVALUATE:
       if (state.currentOperand === null || state.previousOperand === null || state.operation === null) return state;
 
@@ -110,10 +116,12 @@ function App() {
         </div>
         <div className="current-operand">{currentOperand}</div>
       </div>
-      <button className="span-two" onClick={() => dispatch({ type: ACTION.CLEAR })}>
+      <button type="button" className="span-two" onClick={() => dispatch({ type: ACTION.CLEAR })}>
         AC
       </button>
-      <button>Del</button>
+      <button type="button" onClick={() => dispatch({ type: ACTION.DELETE_DIGIT })}>
+        Del
+      </button>
       <OperationButton operation="÷" dispatch={dispatch} />
       <DigitButton digit="1" dispatch={dispatch} />
       <DigitButton digit="2" dispatch={dispatch} />
@@ -129,7 +137,7 @@ function App() {
       <OperationButton operation="-" dispatch={dispatch} />
       <DigitButton digit="." dispatch={dispatch} />
       <DigitButton digit="0" dispatch={dispatch} />
-      <button className="span-two" onClick={() => dispatch({ type: ACTION.EVALUATE })}>
+      <button type="button" className="span-two" onClick={() => dispatch({ type: ACTION.EVALUATE })}>
         =
       </button>
     </div>
