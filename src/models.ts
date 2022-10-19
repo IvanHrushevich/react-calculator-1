@@ -10,6 +10,7 @@ export interface State {
   currentOperand: string | null;
   previousOperand: string | null;
   operation: ACTION | null;
+  overwrite: boolean;
 }
 
 export interface Payload {

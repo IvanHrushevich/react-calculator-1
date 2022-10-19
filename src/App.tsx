@@ -6,10 +6,11 @@ import { ACTION, Payload, State } from './models';
 
 import './styles.css';
 
-const initialState: State = {
+const INITIAL_STATE: State = {
   currentOperand: null,
   previousOperand: null,
   operation: null,
+  overwrite: false,
 };
 
 const computeResult = (a: number, b: number, operation: string): number => {
@@ -42,6 +43,13 @@ function reducer(state: State, { type, payload }: Payload): State {
       // edge cases
       if (payload.digit === '0' && state.currentOperand === '0') return state;
       if (payload.digit === '.' && state.currentOperand?.includes('.')) return state;
+      if (state.overwrite) {
+        return {
+          ...INITIAL_STATE,
+          currentOperand: payload.digit,
+          overwrite: false,
+        };
+      }
 
       return {
         ...state,
@@ -49,7 +57,7 @@ function reducer(state: State, { type, payload }: Payload): State {
       };
 
     case ACTION.CLEAR:
-      return initialState;
+      return INITIAL_STATE;
 
     case ACTION.CHOOSE_OPERATION:
       if (state.currentOperand === null && state.previousOperand === null) return state;
@@ -64,6 +72,7 @@ function reducer(state: State, { type, payload }: Payload): State {
           operation: payload.operation,
           previousOperand: state.currentOperand,
           currentOperand: null,
+          overwrite: false,
         };
       }
 
@@ -81,6 +90,7 @@ function reducer(state: State, { type, payload }: Payload): State {
         operation: null,
         previousOperand: null,
         currentOperand: evaluate(state),
+        overwrite: true,
       };
 
     default: {
@@ -90,7 +100,7 @@ function reducer(state: State, { type, payload }: Payload): State {
 }
 
 function App() {
-  const [{ currentOperand, previousOperand, operation }, dispatch]: [State, any] = useReducer(reducer, initialState);
+  const [{ currentOperand, previousOperand, operation }, dispatch]: [State, any] = useReducer(reducer, INITIAL_STATE);
 
   return (
     <div className="calculator-grid">
