@@ -6,6 +6,18 @@ import { ACTION, Payload, State } from './models';
 
 import './styles.css';
 
+const integerFormatter = new Intl.NumberFormat('en-us', { maximumFractionDigits: 0 });
+
+function formatOperand(operand: string | null): string | null {
+  if (operand === null) return null;
+
+  const [integer, decimal] = operand.split('.');
+  const formattedInteger: string = integerFormatter.format(Number(integer));
+
+  if (decimal === undefined) return formattedInteger;
+  return `${formattedInteger}.${decimal}`;
+}
+
 const INITIAL_STATE: State = {
   currentOperand: null,
   previousOperand: null,
@@ -112,9 +124,9 @@ function App() {
     <div className="calculator-grid">
       <div className="output">
         <div className="previous-operand">
-          {previousOperand} {operation}{' '}
+          {formatOperand(previousOperand)} {operation}
         </div>
-        <div className="current-operand">{currentOperand}</div>
+        <div className="current-operand">{formatOperand(currentOperand)}</div>
       </div>
       <button type="button" className="span-two" onClick={() => dispatch({ type: ACTION.CLEAR })}>
         AC
