@@ -7,8 +7,8 @@ export const enum ACTION {
 }
 
 export interface State {
-  currentOperand: string;
-  previousOperand: string;
+  currentOperand: string | null;
+  previousOperand: string | null;
   operation: ACTION | null;
 }
 
